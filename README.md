@@ -2,6 +2,10 @@
 
 ### <u>AI-Inspired Financial Assistant for Middle-Class Families</u>
 
+Team Name --- kaspa Coder
+Team Members ---- Two members; Kaushik Jain & Mohitveer Singh
+Team ID --- CC3H-198
+
 ---
 
 ## 🌐 Live Demo
