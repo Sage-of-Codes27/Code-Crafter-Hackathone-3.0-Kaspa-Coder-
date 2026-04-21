@@ -1,1 +1,0 @@
-# Code-Crafter-Hackathone-3.0-Kaspa-Coder-
