@@ -497,7 +497,7 @@ class SmartBudgetApp {
                 ? `${health.status} budget health based on savings, needs, and spending pressure.`
                 : "Set your income to generate a score.";
         this.elements.scoreRing.style.background = `
-            radial-gradient(closest-side, white 72%, transparent 73% 100%),
+            radial-gradient(closest-side, var(--card-bg) 72%, transparent 73% 100%),
             conic-gradient(${health.tone} ${degrees}deg, rgba(16, 35, 63, 0.12) 0deg)
         `;
         this.elements.needsActual.textContent = this.formatPercent(summary.needsRate);

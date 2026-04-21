@@ -572,7 +572,7 @@ body {
     border: 2.5px solid var(--border);
     border-radius: var(--radius-sm);
     overflow: hidden;
-    background: white;
+    background: var(--card-bg);
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -586,7 +586,7 @@ body {
     font-weight: 900;
     font-size: 1rem;
     color: var(--muted);
-    background: #f8fafc;
+    background: var(--bg);
     border-right: 2px solid var(--border);
     height: 100%;
     display: flex;
@@ -617,7 +617,7 @@ select.input-big {
     border-radius: var(--radius-sm);
     outline: none;
     color: var(--text);
-    background: white;
+    background-color: var(--card-bg);
     cursor: pointer;
     transition: border-color 0.2s, box-shadow 0.2s;
     appearance: none;
@@ -944,7 +944,7 @@ select.input-big:focus {
     font-size: 0.95rem;
     border: 2px dashed var(--border);
     border-radius: var(--radius-sm);
-    background: #f8fafc;
+    background: var(--bg);
     margin-top: 12px;
 }
 
@@ -958,7 +958,7 @@ select.input-big:focus {
 }
 
 .allocation-card {
-    background: #f8fafc;
+    background: var(--bg);
     border: 1.5px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 16px 18px;
@@ -1055,7 +1055,7 @@ canvas {
     display: grid;
     place-items: center;
     background:
-        radial-gradient(closest-side, white 72%, transparent 73% 100%),
+        radial-gradient(closest-side, var(--card-bg) 72%, transparent 73% 100%),
         conic-gradient(var(--green) 0deg, #e2e8f0 0deg);
     box-shadow: 0 4px 20px rgba(22, 163, 74, 0.18);
 }
@@ -1082,7 +1082,7 @@ canvas {
 }
 
 .score-breakdown__item {
-    background: #f8fafc;
+    background: var(--bg);
     border: 1.5px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 12px 8px;
@@ -1179,7 +1179,7 @@ canvas {
 .goal-result-box--empty {
     border: 2px dashed var(--border);
     color: var(--muted);
-    background: #f8fafc;
+    background: var(--bg);
     text-align: center;
 }
 
