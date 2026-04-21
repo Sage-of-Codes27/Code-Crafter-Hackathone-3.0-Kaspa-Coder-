@@ -1,0 +1,833 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <script>
+            (function () {
+                try {
+                    var t =
+                        localStorage.getItem("smart-budget-theme") || "light";
+                    document.documentElement.setAttribute("data-theme", t);
+                } catch (e) {}
+            })();
+        </script>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>My Budget Planner 💰</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <!-- TOP NAV -->
+        <nav class="topnav">
+            <div class="topnav__inner">
+                <a class="topnav__brand" href="index.html">💰 Budget Planner</a>
+                
+
+                <button
+                    id="themeToggleBtn"
+                    class="topnav__theme"
+                    type="button"
+                    title="Toggle light/dark theme"
+                >
+                    🌙 Dark
+                </button>
+                <button
+                    id="resetAppBtn"
+                    class="topnav__reset"
+                    type="button"
+                    title="Clear all data and start fresh"
+                >
+                    🔄 Reset
+                </button>
+                <div class="topnav__links">
+                    <a href="#step-income">💵 Income</a>
+                    <a href="#step-expenses">🛒 Expenses</a>
+                    <a href="#step-summary">📊 Summary</a>
+                    <a href="#step-analysis">🔍 Analysis</a>
+                    <a href="#step-goals">🎯 Goals</a>
+                    <a href="#step-chat">💬 Advisor</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="page-shell">
+            <!-- HERO BANNER -->
+            <header class="hero">
+                <div class="hero__left">
+                    <div class="hero__badge">
+                        Simple &amp; Friendly Budget Tool
+                    </div>
+                    <h1 class="hero__title">
+                        Plan your money<br />the easy way! 🎉
+                    </h1>
+                    <p class="hero__desc">
+                        Follow the steps below. Enter your income, add your
+                        expenses, and get helpful tips — anyone can use this!
+                    </p>
+                    <div class="hero__steps-hint" id="heroStepsHint">
+                        <button class="step-dot active" type="button" data-step-target="step-income" data-step-name="Income">1</button>
+                        <span class="step-line"></span>
+                        <button class="step-dot" type="button" data-step-target="step-expenses" data-step-name="Expenses">2</button>
+                        <span class="step-line"></span>
+                        <button class="step-dot" type="button" data-step-target="step-summary" data-step-name="Summary">3</button>
+                        <span class="step-line"></span>
+                        <button class="step-dot" type="button" data-step-target="step-analysis" data-step-name="Analysis">4</button>
+                        <p class="step-hint-text" id="stepHintText">Start with Step 1 below ↓</p>
+                    </div>
+                </div>
+                <div class="hero__right">
+                    <div class="glance-card">
+                        <p class="glance-title">📋 This Month at a Glance</p>
+                        <div class="glance-row">
+                            <span class="glance-label">💵 Income</span>
+                            <strong id="heroIncome" class="glance-val"
+                                >Rs 0</strong
+                            >
+                        </div>
+                        <div class="glance-row">
+                            <span class="glance-label">🛒 Expenses</span>
+                            <strong id="heroExpenses" class="glance-val red"
+                                >Rs 0</strong
+                            >
+                        </div>
+                        <div class="glance-row glance-row--big">
+                            <span class="glance-label">💼 Balance</span>
+                            <strong id="heroBalance" class="glance-val green"
+                                >Rs 0</strong
+                            >
+                        </div>
+                        <button
+                            id="analyzeBudgetBtn"
+                            class="btn btn--primary btn--full"
+                            type="button"
+                        >
+                            🔄 Refresh Analysis
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <main class="steps">
+                <!-- STEP 1: INCOME -->
+                <section class="step-section" id="step-income">
+                    <div class="step-label">
+                        <span class="step-num">1</span>
+                        <span class="step-title"
+                            >Enter Your Monthly Income</span
+                        >
+                    </div>
+                    <p class="step-desc">
+                        How much money do you earn in a month? This is the total
+                        amount before spending.
+                    </p>
+                    <div class="card">
+                        <div class="card__icon">💵</div>
+                        <h2 class="card__heading">Monthly Income</h2>
+                        <form id="incomeForm" class="form-stack">
+                            <div class="field-wrap">
+                                <label class="field-label" for="incomeInput"
+                                    >Your monthly income (in Rupees)</label
+                                >
+                                <p class="field-hint">
+                                    Example: if you earn Rs 30,000 per month,
+                                    type 30000
+                                </p>
+                                <div class="input-icon-wrap">
+                                    <span class="input-prefix">Rs</span>
+                                    <input
+                                        id="incomeInput"
+                                        class="input-big"
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        placeholder="e.g. 30000"
+                                    />
+                                </div>
+                            </div>
+                            <button
+                                class="btn btn--primary btn--lg"
+                                type="submit"
+                            >
+                                ✅ Save Income
+                            </button>
+                        </form>
+                        <div class="saved-box" id="incomeSavedBox">
+                            <span class="saved-box__icon">💾</span>
+                            <span class="saved-box__label">Saved Income:</span>
+                            <strong id="incomeValue">Rs 0</strong>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- STEP 2: ADD EXPENSES -->
+                <section class="step-section" id="step-expenses">
+                    <div class="step-label">
+                        <span class="step-num">2</span>
+                        <span class="step-title">Add Your Expenses</span>
+                    </div>
+                    <p class="step-desc">
+                        Add each thing you spend money on. Choose a category and
+                        enter the amount.
+                    </p>
+                    <div class="two-col">
+                        <!-- Add Expense Form -->
+                        <div class="card">
+                            <div class="card__icon">➕</div>
+                            <h2 class="card__heading">Add an Expense</h2>
+                            <form id="expenseForm" class="form-stack">
+                                <div class="field-wrap">
+                                    <label
+                                        class="field-label"
+                                        for="expenseCategory"
+                                        >What type of expense?</label
+                                    >
+                                    <p class="field-hint">
+                                        Pick the category that best matches your
+                                        spending
+                                    </p>
+                                    <select
+                                        id="expenseCategory"
+                                        class="input-big"
+                                        required
+                                    >
+                                        <option value="">
+                                            👇 Choose a category
+                                        </option>
+                                        <option value="Food">
+                                            🍛 Food (groceries, meals)
+                                        </option>
+                                        <option value="Rent">
+                                            🏠 Rent / Housing
+                                        </option>
+                                        <option value="Transport">
+                                            🚌 Transport (bus, petrol, auto)
+                                        </option>
+                                        <option value="Utilities">
+                                            💡 Utilities (electricity, water,
+                                            internet)
+                                        </option>
+                                        <option value="Entertainment">
+                                            🎬 Entertainment (movies, games,
+                                            subscriptions)
+                                        </option>
+                                        <option value="Other">📦 Other</option>
+                                    </select>
+                                </div>
+                                <div class="field-wrap">
+                                    <label
+                                        class="field-label"
+                                        for="expenseAmount"
+                                        >How much did you spend?</label
+                                    >
+                                    <p class="field-hint">
+                                        Enter the amount in Rupees
+                                    </p>
+                                    <div class="input-icon-wrap">
+                                        <span class="input-prefix">Rs</span>
+                                        <input
+                                            id="expenseAmount"
+                                            class="input-big"
+                                            type="number"
+                                            min="0"
+                                            step="1"
+                                            placeholder="e.g. 5000"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <button
+                                    class="btn btn--green btn--lg"
+                                    type="submit"
+                                >
+                                    ➕ Add This Expense
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Expense List -->
+                        <div class="card">
+                            <div class="card__icon">📋</div>
+                            <h2 class="card__heading">
+                                Your Expenses
+                                <span id="expenseCount" class="badge"
+                                    >0 items</span
+                                >
+                            </h2>
+                            <div id="expenseList" class="expense-list"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- STEP 3: SUMMARY -->
+                <section class="step-section" id="step-summary">
+                    <div class="step-label">
+                        <span class="step-num">3</span>
+                        <span class="step-title">See Your Summary</span>
+                    </div>
+                    <p class="step-desc">
+                        A quick view of how your money is being used this month.
+                    </p>
+                    <div class="four-col">
+                        <div class="stat-card stat-card--blue">
+                            <span class="stat-icon">💵</span>
+                            <span class="stat-label">Total Income</span>
+                            <strong id="statIncome" class="stat-value"
+                                >Rs 0</strong
+                            >
+                        </div>
+                        <div class="stat-card stat-card--red">
+                            <span class="stat-icon">🛒</span>
+                            <span class="stat-label">Total Expenses</span>
+                            <strong id="statExpenses" class="stat-value"
+                                >Rs 0</strong
+                            >
+                        </div>
+                        <div class="stat-card stat-card--green">
+                            <span class="stat-icon">💼</span>
+                            <span class="stat-label">Remaining Balance</span>
+                            <strong id="statBalance" class="stat-value"
+                                >Rs 0</strong
+                            >
+                        </div>
+                        <div class="stat-card stat-card--yellow">
+                            <span class="stat-icon">📈</span>
+                            <span class="stat-label">Savings Rate</span>
+                            <strong id="statSavingsRate" class="stat-value"
+                                >0%</strong
+                            >
+                        </div>
+                    </div>
+                    <div class="card savings-progress-card">
+                        <p class="progress-heading">
+                            🎯 Savings Goal Progress
+                            <span class="badge badge--teal"
+                                >Target: 20% of income</span
+                            >
+                        </p>
+                        <p class="progress-sub">
+                            The 50/30/20 rule suggests saving at least 20% of
+                            your income.
+                        </p>
+                        <div class="progress-bar-wrap">
+                            <div class="progress-bar-bg">
+                                <div
+                                    id="savingsProgressBar"
+                                    class="progress-bar-fill"
+                                ></div>
+                            </div>
+                            <span
+                                id="savingsProgressLabel"
+                                class="progress-label"
+                                >0% of 20% goal</span
+                            >
+                        </div>
+                    </div>
+                </section>
+
+                <!-- STEP 4: ANALYSIS -->
+                <section class="step-section" id="step-analysis">
+                    <div class="step-label">
+                        <span class="step-num">4</span>
+                        <span class="step-title"
+                            >Budget Analysis &amp; Tips</span
+                        >
+                    </div>
+                    <p class="step-desc">
+                        The 50/30/20 rule says: spend 50% on needs, 30% on
+                        wants, and save 20%. Here's how you compare!
+                    </p>
+
+                    <div class="two-col">
+                        <!-- 50/30/20 Allocation -->
+                        <div class="card">
+                            <div class="card__icon">⚖️</div>
+                            <h2 class="card__heading">50/30/20 Budget Check</h2>
+                            <p class="card__sub">
+                                How your spending compares to the recommended
+                                rule
+                            </p>
+                            <div
+                                id="allocationComparison"
+                                class="allocation-list"
+                            ></div>
+                        </div>
+
+                        <!-- Chart -->
+                        <div class="card">
+                            <div class="card__icon">📊</div>
+                            <h2 class="card__heading">Spending by Category</h2>
+                            <p class="card__sub">
+                                A visual breakdown of where your money goes
+                            </p>
+                            <canvas
+                                id="expenseChart"
+                                width="520"
+                                height="300"
+                                aria-label="Expense chart"
+                            ></canvas>
+                        </div>
+                    </div>
+
+                    <div class="three-col">
+                        <!-- Health Score -->
+                        <div class="card score-card">
+                            <div class="card__icon">❤️</div>
+                            <h2 class="card__heading">Budget Health Score</h2>
+                            <p class="card__sub">How healthy is your budget?</p>
+                            <div class="score-ring">
+                                <div id="scoreValue" class="score-ring__value">
+                                    0
+                                </div>
+                            </div>
+                            <p id="scoreStatus" class="score-status">
+                                Set your income to get your score.
+                            </p>
+                            <div class="score-breakdown">
+                                <div class="score-breakdown__item">
+                                    <span class="sb-icon">🏠</span>
+                                    <span class="sb-label">Needs</span>
+                                    <strong id="needsActual">0%</strong>
+                                </div>
+                                <div class="score-breakdown__item">
+                                    <span class="sb-icon">🎬</span>
+                                    <span class="sb-label">Wants</span>
+                                    <strong id="wantsActual">0%</strong>
+                                </div>
+                                <div class="score-breakdown__item">
+                                    <span class="sb-icon">💰</span>
+                                    <span class="sb-label">Savings</span>
+                                    <strong id="savingsActual">0%</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Smart Suggestions -->
+                        <div class="card">
+                            <div class="card__icon">💡</div>
+                            <h2 class="card__heading">Smart Tips</h2>
+                            <p class="card__sub">
+                                Personalized advice based on your budget
+                            </p>
+                            <ul id="suggestionsList" class="tips-list"></ul>
+                        </div>
+
+                        <!-- Forecast -->
+                        <div class="card">
+                            <div class="card__icon">🔮</div>
+                            <h2 class="card__heading">Savings Forecast</h2>
+                            <p class="card__sub">
+                                If you keep saving at this rate...
+                            </p>
+                            <div class="forecast-list">
+                                <div class="forecast-item">
+                                    <span class="forecast-period"
+                                        >This Month</span
+                                    >
+                                    <strong
+                                        id="monthlySavings"
+                                        class="forecast-amount"
+                                        >Rs 0</strong
+                                    >
+                                </div>
+                                <div class="forecast-item">
+                                    <span class="forecast-period"
+                                        >After 1 Year</span
+                                    >
+                                    <strong
+                                        id="yearlySavings"
+                                        class="forecast-amount"
+                                        >Rs 0</strong
+                                    >
+                                </div>
+                                <div class="forecast-item">
+                                    <span class="forecast-period"
+                                        >After 5 Years</span
+                                    >
+                                    <strong
+                                        id="fiveYearSavings"
+                                        class="forecast-amount highlight-amount"
+                                        >Rs 0</strong
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- STEP 5: GOAL PLANNER -->
+                <section class="step-section" id="step-goals">
+                    <div class="step-label">
+                        <span class="step-num">5</span>
+                        <span class="step-title">Plan a Savings Goal 🎯</span>
+                    </div>
+                    <p class="step-desc">
+                        Want to save for something special — a phone, vacation,
+                        or emergency fund? Enter your goal below!
+                    </p>
+                    <div class="card card--wide">
+                        <div class="card__icon">🎯</div>
+                        <h2 class="card__heading">Goal Planner</h2>
+                        <form id="goalForm" class="form-inline">
+                            <div class="field-wrap">
+                                <label class="field-label" for="goalAmount"
+                                    >What is your savings goal? (Rs)</label
+                                >
+                                <p class="field-hint">
+                                    Example: Rs 50,000 for a new phone or trip
+                                </p>
+                                <div class="input-icon-wrap">
+                                    <span class="input-prefix">Rs</span>
+                                    <input
+                                        id="goalAmount"
+                                        class="input-big"
+                                        type="number"
+                                        min="0"
+                                        step="1"
+                                        placeholder="e.g. 50000"
+                                    />
+                                </div>
+                            </div>
+                            <div class="field-wrap">
+                                <label class="field-label" for="goalMonths"
+                                    >How many months to reach this goal?</label
+                                >
+                                <p class="field-hint">Example: 6 months</p>
+                                <div class="input-icon-wrap">
+                                    <span class="input-prefix">Mo</span>
+                                    <input
+                                        id="goalMonths"
+                                        class="input-big"
+                                        type="number"
+                                        min="1"
+                                        step="1"
+                                        placeholder="e.g. 6"
+                                    />
+                                </div>
+                            </div>
+                            <button
+                                class="btn btn--accent btn--lg"
+                                type="submit"
+                            >
+                                🎯 Calculate My Plan
+                            </button>
+                        </form>
+                        <div
+                            id="goalResult"
+                            class="goal-result-box goal-result-box--empty"
+                        >
+                            Fill in your goal above and click Calculate to see
+                            your monthly savings plan.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- STEP 6: CHAT ADVISOR -->
+                <section class="step-section" id="step-chat">
+                    <div class="step-label">
+                        <span class="step-num">6</span>
+                        <span class="step-title"
+                            >Ask Your Budget Advisor 💬</span
+                        >
+                    </div>
+                    <p class="step-desc">
+                        Have a question about your budget? Just ask! Try
+                        questions like "Can I afford a Rs 15000 phone?" or "How
+                        do I save more?"
+                    </p>
+                    <div class="card card--wide">
+                        <div class="chat-card-header">
+                            <div>
+                                <div class="card__icon">🤖</div>
+                                <h2 class="card__heading">
+                                    Budget Advisor Chat
+                                </h2>
+                                <p class="card__sub">
+                                    Understands Indian amounts — "1 lakh", "50
+                                    thousand", "2 crore" and handles typing
+                                    mistakes too!
+                                </p>
+                            </div>
+                            <button
+                                id="clearChatBtn"
+                                class="btn-clear-chat"
+                                type="button"
+                            >
+                                🗑️ Clear Chat
+                            </button>
+                        </div>
+                        <div class="chat-examples">
+                            <span class="chat-example-label"
+                                >💡 Try asking:</span
+                            >
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="EMI for 10 lakh at 9% for 5 years"
+                            >
+                                🏦 EMI calculator
+                            </button>
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="Loan of 5 lakh at 11% for 3 years"
+                            >
+                                💳 Loan calculator
+                            </button>
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="SIP of 5000 at 12% for 10 years"
+                            >
+                                📈 SIP calculator
+                            </button>
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="FD of 1 lakh at 7% for 5 years"
+                            >
+                                🏛️ FD calculator
+                            </button>
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="Retirement plan"
+                            >
+                                🌴 Retirement plan
+                            </button>
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="Inflation effect on 1 lakh in 10 years at 6%"
+                            >
+                                📉 Inflation impact
+                            </button>
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="Financial freedom number"
+                            >
+                                🗽 Financial freedom
+                            </button>
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="Debt payoff plan for 2 lakh at 18%"
+                            >
+                                💣 Debt payoff
+                            </button>
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="Can I afford a 1 lakh phone?"
+                            >
+                                Can I afford a 1 lakh phone?
+                            </button>
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="How is my budget?"
+                            >
+                                How is my budget?
+                            </button>
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="What is my balance?"
+                            >
+                                What is my balance?
+                            </button>
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="How do I save more?"
+                            >
+                                How to save more?
+                            </button>
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="Should I invest?"
+                            >
+                                Should I invest?
+                            </button>
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="What is the 50/30/20 rule?"
+                            >
+                                What is 50/30/20?
+                            </button>
+                            <button class="chat-chip" type="button" data-question="Step up SIP of 5000 at 12% for 20 years step up by 10%">📈 Step-up SIP</button>
+                            <button class="chat-chip" type="button" data-question="How much SIP for 1 crore in 20 years at 12%">🎯 Goal SIP</button>
+                            <button class="chat-chip" type="button" data-question="Rule of 72">⏳ Rule of 72</button>
+                            <button class="chat-chip" type="button" data-question="PPF">🏦 PPF</button>
+                            <button class="chat-chip" type="button" data-question="EPF">💼 EPF</button>
+                            <button class="chat-chip" type="button" data-question="NPS">🏛️ NPS</button>
+                            <button class="chat-chip" type="button" data-question="Take home from 12 lakh CTC">💰 Take home</button>
+                            <button class="chat-chip" type="button" data-question="Rent vs Buy">🏠 Rent vs Buy</button>
+                            <button class="chat-chip" type="button" data-question="Got a 15% salary hike">🎉 Salary hike</button>
+                            <button class="chat-chip" type="button" data-question="Tip of the day">💡 Daily tip</button>
+                            <button class="chat-chip" type="button" data-question="Money fact">📚 Money fact</button>
+                            <button class="chat-chip" type="button" data-question="Tell me a joke">😄 Joke</button>
+                            <button
+                                class="chat-chip"
+                                type="button"
+                                data-question="Help"
+                            >
+                                Help
+                            </button>
+                        </div>
+                        <div id="chatMessages" class="chat-messages"></div>
+                        <form id="chatForm" class="chat-input-row">
+                            <input
+                                id="chatQuestion"
+                                class="chat-input"
+                                type="text"
+                                placeholder='Try: "EMI for 10 lakh at 9% for 5 years" or "SIP of 5000 at 12% for 10 years"'
+                            />
+                            <button class="btn btn--primary" type="submit">
+                                Send 💬
+                            </button>
+                        </form>
+                    </div>
+                </section>
+            </main>
+
+            <footer class="footer">
+                <div class="footer__top">
+                    <div class="footer__brand">
+                        <span class="footer__logo">💰</span>
+                        <span class="footer__name">Budget Planner</span>
+                        <p class="footer__tagline">
+                            Simple, private, and powerful budgeting for everyone
+                            — any age, anywhere.
+                        </p>
+                        <p class="footer__privacy-note">
+                            🔒 Your data never leaves your device. No login. No
+                            tracking.
+                        </p>
+                    </div>
+
+                    <div class="footer__col">
+                        <h4 class="footer__col-title">Company</h4>
+                        <ul class="footer__links">
+                            <li><a href="about.html">👥 About Us</a></li>
+                            <li>
+                                <a href="future-plans.html">🚀 Future Plans</a>
+                            </li>
+                            <li><a href="contact.html">📬 Contact Us</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer__col">
+                        <h4 class="footer__col-title">Features</h4>
+                        <ul class="footer__links">
+                            <li>
+                                <a href="#step-income">💵 Income Tracking</a>
+                            </li>
+                            <li>
+                                <a href="#step-expenses">🛒 Expense Tracking</a>
+                            </li>
+                            <li>
+                                <a href="#step-analysis"
+                                    >📊 50/30/20 Analysis</a
+                                >
+                            </li>
+                            <li><a href="#step-goals">🎯 Goal Planner</a></li>
+                            <li><a href="#step-chat">🤖 Budget Advisor</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer__col">
+                        <h4 class="footer__col-title">Legal</h4>
+                        <ul class="footer__links">
+                            <li>
+                                <a href="privacy.html">🔐 Privacy Policy</a>
+                            </li>
+                            <li><a href="terms.html">📄 Terms of Use</a></li>
+                            <li><a href="disclaimer.html">⚠️ Disclaimer</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="footer__bottom">
+                    <p class="footer__copy">
+                        © 2026 Budget Planner. All rights reserved.
+                    </p>
+                    <p class="footer__trademark">
+                        Budget Planner™ is a browser-based financial tool. Not
+                        affiliated with any bank or financial institution.
+                    </p>
+                    <div class="footer__badges">
+                        <span class="footer__badge">🔒 100% Private</span>
+                        <span class="footer__badge">📵 No Ads</span>
+                        <span class="footer__badge">☁️ No Account Needed</span>
+                        <span class="footer__badge">🇮🇳 Made for India</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+        <div id="toast" class="toast" aria-live="polite"></div>
+
+        <script src="script.js"></script>
+        <script>
+            const THEME_KEY = "smart-budget-theme";
+            const themeBtn = document.getElementById("themeToggleBtn");
+            function applyThemeLabel() {
+                const isDark =
+                    document.documentElement.getAttribute("data-theme") ===
+                    "dark";
+                themeBtn.textContent = isDark ? "☀️ Light" : "🌙 Dark";
+                themeBtn.title = isDark
+                    ? "Switch to light theme"
+                    : "Switch to dark theme";
+            }
+            applyThemeLabel();
+            themeBtn.addEventListener("click", () => {
+                const current =
+                    document.documentElement.getAttribute("data-theme") ||
+                    "light";
+                const next = current === "dark" ? "light" : "dark";
+                document.documentElement.setAttribute("data-theme", next);
+                try {
+                    localStorage.setItem(THEME_KEY, next);
+                } catch (e) {}
+                applyThemeLabel();
+            });
+
+            document
+                .getElementById("resetAppBtn")
+                .addEventListener("click", () => {
+                    const ok = confirm(
+                        "This will clear ALL your saved data (income, expenses, chat) and reload the page as a fresh start. Continue?",
+                    );
+                    if (!ok) return;
+                    let savedTheme = null;
+                    try {
+                        savedTheme = localStorage.getItem(THEME_KEY);
+                        localStorage.clear();
+                        sessionStorage.clear();
+                        if (savedTheme)
+                            localStorage.setItem(THEME_KEY, savedTheme);
+                    } catch (e) {}
+                    const url = new URL(window.location.href);
+                    url.searchParams.set("_fresh", Date.now().toString());
+                    window.location.replace(url.toString());
+                });
+
+            document.querySelectorAll(".chat-chip").forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    document.getElementById("chatQuestion").value =
+                        btn.dataset.question;
+                    document.getElementById("chatQuestion").focus();
+                });
+            });
+        </script>
+    </body>
+</html>
